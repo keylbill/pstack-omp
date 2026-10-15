@@ -36,6 +36,8 @@ Concrete models belong to your native `modelRoles`. Pstack owns only its externa
 
 Fresh main sessions start with mode on. Workers stay off. Saved branch choices take precedence. `/pstack off` suspends workflow mode for the branch; `/pstack on` or `/poteto-mode` enables it. `/skill:<name>` works independently of mode. Host permissions and repository privacy always apply.
 
+For an existing manual or local-link setup, follow [Migrate an existing installation](./docs/migrate-existing-installation.md) before replacing it. Preserve your model choices and remove only verified pstack-owned activation.
+
 Read the [guide](./docs/guide/README.md), or ask [`/poteto-help`](./skills/poteto-help/SKILL.md) for a recommendation without starting work.
 ## Usage
 
