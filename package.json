@@ -1,0 +1,30 @@
+{
+  "name": "pstack",
+  "version": "0.15.25-omp.1",
+  "upstreamVersion": "0.15.25",
+  "description": "Lauren Tan's pstack engineering workflows adapted for native OMP",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/keylbill/pstack-omp.git"
+  },
+  "homepage": "https://github.com/keylbill/pstack-omp",
+  "bugs": {
+    "url": "https://github.com/keylbill/pstack-omp/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "omp": {
+    "extensions": [
+      "./extensions/pstack.js"
+    ]
+  },
+  "scripts": {
+    "check": "node scripts/check-package.mjs && node scripts/test_pstack_routing_regression.mjs && node --test scripts/test_pstack_schedule_regression.mjs"
+  },
+  "devDependencies": {
+    "zod": "^4.0.0"
+  }
+}
