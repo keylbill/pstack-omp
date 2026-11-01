@@ -8,7 +8,7 @@ Install with `omp plugin install github:keylbill/pstack-omp#main`, then inspect 
 
 Commands run as `/skill:<name>`. The pstack extension also registers each unprefixed pstack slash command, so `/poteto-mode` below works either way.
 
-Use `omp plugin disable pstack` or `omp plugin enable pstack`, then restart OMP to change the effective plugin catalog. `/pstack off` only suspends mode, not the plugin. This local link updates in place through `/pstack update`; `omp plugin upgrade pstack` is unavailable for local links. Update OMP independently, and keep the raw author snapshot, adapted installation, and new upstream version separate during the three-way port.
+Use `omp plugin disable pstack` or `omp plugin enable pstack`, then restart OMP to change the effective plugin catalog. `/pstack off` only suspends mode, not the plugin. To update pstack, run `omp plugin upgrade pstack`, then restart OMP. Update OMP itself independently.
 
 ## Pick your models
 
@@ -28,13 +28,15 @@ Override only the roles you want to change. A role without an entry uses its doc
 
 Set a role to `inherit-parent` or `auto` to use the active parent model and effort. Register helpers through `pstack_plan` before dispatch. The native hook returns explicit `model: "@default"` internally. This is not a `task` input field. Omitting registration leaves native task overrides and worker-profile policy in effect, so omission does not request inheritance. A panel is a list with one worker per entry. Setup also configures `swarm workers` unless a race explicitly selects each arm.
 
-## Accept the verification offer, or don't
+## Accept the verification offers, or don't
 
 At the end of setup, `/setup-pstack` looks for a way to prove app behavior in your project, either a `verify-*` skill or an existing harness. If it finds neither, it offers once to generate one with [`/create-verification-skill`](../../skills/create-verification-skill/SKILL.md).
 
 Say yes and it writes `.omp/skills/verify-<app>/`, a project-local skill that teaches agents to drive your app the way a user does. It proves the skill works once before handing it over. Say no and setup moves on. You can run `/create-verification-skill` yourself any time. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers when it earns its place.
 
 If you're new to pstack, accept the offer when the host permits the required checks. A verification skill lets an agent check the actual result instead of handing every result back for you to inspect.
+
+Then setup offers once to generate a formal verification skill with [`/create-formal-verification-skill`](../../skills/create-formal-verification-skill/SKILL.md), unless the project already has one. Tests check the cases someone thought to write. A formal verification skill checks one key property of your code, such as "a job never runs twice at once", in every case within a stated scope. Say yes when your code has concurrency, retries, a state machine, or a parser, where a bug is costly and tests rarely reach the case that breaks. Otherwise say no, and run it later if that changes. [Verify and ship](./06-verify-and-ship.md#prove-a-property-with-a-formal-verification-skill) covers it.
 
 The role map is read at each registered dispatch. Restart OMP after installing or changing the extension, agents, or skill catalog.
 

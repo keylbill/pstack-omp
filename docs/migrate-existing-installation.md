@@ -27,6 +27,8 @@ Native uninstall removes pstack-specific registry settings. If uninstall is need
 
 Remove an individual discovery link only after its resolved target proves it belongs to the legacy pstack package. Keep user-authored files and unrelated links intact. Do not delete the legacy source tree, role file, or receipts as part of activation cutover. Do not run a historical rollback helper that can restore unrelated native settings.
 
+Before installation, inspect `node_modules/pstack` in the plugins root. If it is a symlink into the verified legacy tree, remove that symlink only. Otherwise Bun can write through the link into the legacy source during `omp plugin install`. Preserve the target directory and unrelated dependencies.
+
 Install the Git-backed package.
 
 ```sh

@@ -2,13 +2,13 @@
 
 pstack is an engineering workflow for investigating deeply, making focused changes, and delegating work with explicit verification. `/poteto-mode` matches your task to a playbook and runs the supporting skills.
 
-This is [keylbill's native OMP adaptation](https://github.com/keylbill/pstack-omp) of [Lauren Tan's pstack](https://github.com/cursor/plugins/tree/main/pstack). It preserves the complete author workflows, supporting skills, worker profiles, guide, assets, and dormant Benny automation pack. It is not an official Cursor release.
+This is [keylbill's native OMP adaptation](https://github.com/keylbill/pstack-omp) of [Lauren Tan's pstack](https://github.com/cursor/plugins/tree/main/pstack). It preserves the author workflows, supporting skills, worker profiles, guide, assets, and dormant Benny automation pack.
 
-The native package name is `pstack`. This repository is `pstack-omp`. Adapted release `0.15.25-omp.1` is based on upstream `0.15.25`. [Public provenance](./upstream.json) pins the exact source and team-kit dependencies.
+The native package name is `pstack`. This repository is `pstack-omp`. Adapted release `0.15.36-omp.1` is based on upstream `0.15.36`. [Public provenance](./upstream.json) pins the exact source and team-kit dependencies.
 
 ## Install and configure
 
-Use OMP 18.11 or later with the public extension APIs, and put Git on `PATH`. The standalone OMP executable embeds Bun for plugin package installation. That does not provide a `bun` command for authored helper programs. Install standalone Bun separately when a playbook invokes its Bun helpers. Node.js 22 or later runs the package checks and Node helper programs. Optional integrations need their own authenticated tools and authorization.
+Use OMP with the public extension API, and put Git on `PATH`. The standalone OMP executable embeds Bun for plugin package installation. That does not provide a `bun` command for authored helper programs. Install standalone Bun separately when a playbook invokes its Bun helpers. Node.js 22 or later runs the package checks and Node helper programs. Optional integrations need their own authenticated tools and authorization.
 
 Author Bun helpers lazily install their frozen dependencies into the bundled helper's `node_modules` directory when invoked. This is disposable dependency material, not user configuration. An upgrade may rebuild it. Plugin installation and startup do not run the helper bootstrap.
 
@@ -81,15 +81,7 @@ Schedules run only while this OMP process is alive. They coalesce missed ticks w
 omp plugin upgrade pstack
 ```
 
-Restart OMP after the upgrade. The native manager refreshes the recorded Git ref and preserves enablement and feature selection. With `#main`, it tracks the moving branch. Fixed tags and commits stay fixed. Bare `omp plugin upgrade` is not a substitute for the named command. Local source links cannot use native upgrade.
-
-The external configuration survives managed package replacement. An upgrade never applies a stored budget or replaces deliberate model choices. Required role changes go through confirmed `/setup-pstack`, not upstream defaults.
-
-`/pstack update check` inspects the recorded recipient Git ref without installed writes. `/pstack update` requests the bounded native upgrade workflow. These agent-assisted commands may cost model calls. No background updater runs.
-
-Maintainers use the separate [upstream reconciliation procedure](./docs/maintainer-upstream.md). Keep pinned raw source, adapted source, and new upstream source distinct. Do not port Cursor changes into a recipient's managed dependency tree.
-
-Installing or upgrading the native package does not advance the upstream author pin. Read the [recipient update procedure](./skills/poteto-mode/references/upstream-update.md) for scope, prerequisites, and failure behavior.
+Restart OMP after the upgrade.
 
 ### Just use [`/poteto-mode`](./skills/poteto-mode/SKILL.md)
 
@@ -126,8 +118,8 @@ morning.
 | [shipping](./skills/poteto-mode/playbooks/shipping.md) | independently verify a green stack, then land the contiguous verified run bottom-up through `gh` by default or Origin when its CLI is available. |
 | [autonomous run](./skills/poteto-mode/playbooks/autonomous-run.md) | drive a long task to completion without stopping. A blocked external action never blocks independent work. |
 | [orchestrate](./skills/poteto-mode/playbooks/orchestrate.md) | a standing project handed to one coordinator chat: multi-day, many stacked prs, fleets of subagents. |
-| [autopilot-full](./skills/poteto-mode/playbooks/autopilot-full.md) | run independent prs to merged with one owner per pr and a root swarm verdict on each round, from the code-ready head on. |
-| [autopilot-stack](./skills/poteto-mode/playbooks/autopilot-stack.md) | build and verify one linear base-branch stack for the operator to review and land. |
+| [autopilot-full](./skills/poteto-mode/playbooks/autopilot-full.md) | run independent prs to merged with one owner per pr. A swarm verifies each code-ready head and every later patch change. |
+| [autopilot-stack](./skills/poteto-mode/playbooks/autopilot-stack.md) | build and verify prs for the operator to land. Stack a pr only on a pr it builds on. |
 | [session pickup](./skills/poteto-mode/playbooks/session-pickup.md) | resume or take over a prior agent's in-flight work (scoped OMP history, a real remote-agent artifact, or a pushed branch). |
 | [pause safely](./skills/poteto-mode/playbooks/pause-safely.md) | suspend in-flight work cleanly so it can be resumed later. |
 | [multi-phase plan](./skills/poteto-mode/playbooks/multi-phase-plan.md) | work that spans phases or stacked PRs. |
@@ -165,8 +157,9 @@ The full rules and playbooks live in [`skills/poteto-mode/SKILL.md`](./skills/po
 | [`/poteto-mode`](./skills/poteto-mode/SKILL.md) | default entry point for any non-trivial task. |
 | [`/poteto-help`](./skills/poteto-help/SKILL.md) | recommend a skill, playbook, or principle without starting the work. |
 | [`/in-your-own-words`](./skills/in-your-own-words/SKILL.md) | restate your goal and problem before starting, only when explicitly requested. |
-| [`/sharpen`](./skills/sharpen/SKILL.md) | improve the approach to your actual goal without overspecifying implementation. |
-| [`/ketchup`](./skills/ketchup/SKILL.md) | summarize what changed since your last message with the evidence you need to judge it. |
+| [`/sharpen`](./skills/sharpen/SKILL.md) | deepen a prompt with expert methods, source material, and an outside check. Returns the rewritten prompt without doing the task. |
+| [`/ketchup`](./skills/ketchup/SKILL.md) | summarize changes with evidence and every decision waiting on you, with enough context to decide from the reply. |
+| [`/ketchup-video`](./skills/ketchup-video/SKILL.md) | deliver a subtitled, evidence-based catch-up video with pending decisions in text. |
 | [`/how`](./skills/how/SKILL.md) | you want a walkthrough of how a subsystem works. |
 | [`/why`](./skills/why/SKILL.md) | you want to know why something was built this way. Discovers actually-mounted `xd://` evidence tools at run time and queries each evidence category in parallel (source control, issue tracker, long-form docs, real-time chat, infra observability, error tracking, analytics warehouse), adapted from the per-source example playbooks. |
 | [`/recall`](./skills/recall/SKILL.md) | you're starting or resuming work and want your recent context rebuilt from your own project-scoped history (native archive prelude, live `history://` for spawned agents) and the shared record, handed back as a tight current-state brief. Never another project's material. |
@@ -174,10 +167,10 @@ The full rules and playbooks live in [`skills/poteto-mode/SKILL.md`](./skills/po
 | [`/architect`](./skills/architect/SKILL.md) | you're about to write code that crosses a function boundary and want the caller's usage, types, and module shape settled first. |
 | [`/arena`](./skills/arena/SKILL.md) | you want N parallel attempts at the same thing, then to grab the best parts of each. Competing writers run isolated; the native plugin keeps automatic application disabled, so you inspect and integrate deliberately. |
 | [`/swarm`](./skills/swarm/SKILL.md) | you want N parallel workers across different slices or races, then one aggregated report. |
-| [`/interrogate`](./skills/interrogate/SKILL.md) | you have a diff and want several different models to try to break it, including a strict code-quality lens. |
+| [`/interrogate`](./skills/interrogate/SKILL.md) | have several models challenge a diff and retain only findings supported by a run. |
 | [`/automate-me`](./skills/automate-me/SKILL.md) | you want your own `-mode` skill, drafted from how you've actually worked. |
 | [`/make-bot-ui`](./skills/make-bot-ui/SKILL.md) | you want a page whose buttons wake a real Grok Bot webhook routine, including the sender-key handoff and optional tailnet exposure. The Grok routine, webhook, credential handoff, and Tailscale are real external prerequisites requiring your explicit authorization; nothing is provisioned by installation. |
-| [`/setup-pstack`](./skills/setup-pstack/SKILL.md) | you want to pick which models pstack uses per role. Detects your authenticated available models and writes [`models.json`](./models.json). Native `modelRoles` in the effective OMP config owns concrete selectors. |
+| [`/setup-pstack`](./skills/setup-pstack/SKILL.md) | pick pstack's model roles from the authenticated catalog and save confirmed choices to the external user `models.json`. Native `modelRoles` owns concrete selectors. |
 | [`/reflect`](./skills/reflect/SKILL.md) | a long task landed and you want the recipe captured as a skill edit. |
 | [`/correct`](./skills/correct/SKILL.md) | you keep correcting agents for the same mistakes. mines history for mistake classes, fixes each at the highest level that works (architecture, then types, lint, and ci, then tests, with docs last), and keeps a table pairing each rule with what enforces it. |
 | [`/teach`](./skills/teach/SKILL.md) | you want to actually understand a change or subsystem, not just have it summarized. runs how + why and weaves one plain explanation, built up diagram by diagram. |
@@ -189,6 +182,9 @@ The full rules and playbooks live in [`skills/poteto-mode/SKILL.md`](./skills/po
 | [`/show-me-your-work`](./skills/show-me-your-work/SKILL.md) | you want a reviewable decision trail. logs decisions to a tsv you can commit. |
 | [`/create-verification-skill`](./skills/create-verification-skill/SKILL.md) | your project has no scripted way to prove app behavior. generates a project-local verify skill with a feature map, for any language or platform. |
 | [`/maintain-verification-skill`](./skills/maintain-verification-skill/SKILL.md) | your verify skill's feature map has drifted from the app. source wave + one live pass, at most one PR of proven corrections. |
+| [`/create-formal-verification-skill`](./skills/create-formal-verification-skill/SKILL.md) | create project-local formal checks for high-risk code. |
+| [`/maintain-formal-verification-skill`](./skills/maintain-formal-verification-skill/SKILL.md) | reconcile formal checks with changed code and distinguish verification drift from bugs. |
+| [`/statechart`](./skills/statechart/SKILL.md) | check TLA+ models and draw Mermaid statecharts with the shortest paths that break a rule. |
 | [`/unslop`](./skills/unslop/SKILL.md) | you're cleaning up writing. removes AI tells. |
 | [`/bro`](./skills/bro/SKILL.md) | you want the last message restated in plain human language, no jargon. |
 | [`/technical-writing`](./skills/technical-writing/SKILL.md) | layered doc standard (Diátaxis + Google developer style + STE + Global English) for docs, RFCs, readmes, PR descriptions, commit messages. |
@@ -245,7 +241,7 @@ automate-me:       /automate-me
 </details>
 ## Agents
 
-pstack ships two agents (both linked into `~/.omp/agent/agents/`):
+pstack ships two agents, discovered through the enabled native plugin.
 
 `/poteto-mode` runs in the session that receives it. That session owns its playbook, coordinator todo list, and helper dispatch. The bundled worker profile wraps delegates. It does not move the parent session into a subagent.
 
@@ -264,39 +260,41 @@ Twenty-four short skills, one principle each. `poteto-mode` indexes them inline 
 | [laziness-protocol](./skills/principle-laziness-protocol/SKILL.md) | core | Bias toward deletion and the smallest change that solves the problem. |
 | [foundational-thinking](./skills/principle-foundational-thinking/SKILL.md) | core | Apply before writing logic: choosing core types and data structures, sequencing scaffold-vs-feature work, asking what concurrent actors share. Get the data structures right so downstream code becomes obvious. |
 | [redesign-from-first-principles](./skills/principle-redesign-from-first-principles/SKILL.md) | core | Redesign as if the requirement had been a foundational assumption from day one, instead of bolting it on. |
-| [attack-the-premise](./skills/principle-attack-the-premise/SKILL.md) | core | Apply when two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it. |
+| [attack-the-premise](./skills/principle-attack-the-premise/SKILL.md) | core | Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before writing another fix that assumes it. |
 | [subtract-before-you-add](./skills/principle-subtract-before-you-add/SKILL.md) | core | Remove dead weight, redundant validators, and stub references first, then build on the simpler base. |
 | [minimize-reader-load](./skills/principle-minimize-reader-load/SKILL.md) | core | Count layers between question and answer, and hidden state in the reader's head; collapse one-caller wrappers and shrink mutable scope. |
+| [outcome-oriented-execution](./skills/principle-outcome-oriented-execution/SKILL.md) | core | Converge on the target architecture during migrations. Do not preserve throwaway compatibility states. |
 | [experience-first](./skills/principle-experience-first/SKILL.md) | core | Choose user delight over implementation convenience; ship fewer polished features over more rough ones. |
 | [exhaust-the-design-space](./skills/principle-exhaust-the-design-space/SKILL.md) | core | Build 2-3 competing prototypes and compare side by side before committing. |
 | [build-the-lever](./skills/principle-build-the-lever/SKILL.md) | core | Apply to any non-trivial work, not just bulk work: edits, migrations, analyses, checks. Build the tool that does it or proves it (codemod, script, generator, or a skill your subagents follow) instead of working by hand. The tool is the artifact a reviewer can rerun. |
 | [model-the-domain](./skills/principle-model-the-domain/SKILL.md) | architecture | Encode the domain in a structure instead of scattered conditionals. |
 | [boundary-discipline](./skills/principle-boundary-discipline/SKILL.md) | architecture | Concentrate guards at system boundaries (CLI, config, network, external APIs); trust internal types and keep business logic in pure functions. |
-| [type-system-discipline](./skills/principle-type-system-discipline/SKILL.md) | architecture | Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas. |
+| [type-system-discipline](./skills/principle-type-system-discipline/SKILL.md) | architecture | Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas. |
 | [make-operations-idempotent](./skills/principle-make-operations-idempotent/SKILL.md) | architecture | Converge to the same end state regardless of partial prior runs. |
 | [migrate-callers-then-delete-legacy-apis](./skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md) | architecture | Migrate callers and delete the old API in the same wave instead of preserving compatibility layers. |
 | [separate-before-serializing-shared-state](./skills/principle-separate-before-serializing-shared-state/SKILL.md) | architecture | Eliminate the sharing first; serialize structurally only when one shared writer is a real invariant. |
 | [prove-it-works](./skills/principle-prove-it-works/SKILL.md) | verification | Apply after completing a task, before declaring done. Verify against the real artifact (run the feature, read the actual value, inspect the diff), not a proxy, self-report, or 'it compiles.'. |
-| [fix-root-causes](./skills/principle-fix-root-causes/SKILL.md) | verification | Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes. |
+| [fix-root-causes](./skills/principle-fix-root-causes/SKILL.md) | verification | Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate. |
 | [sequence-verifiable-units](./skills/principle-sequence-verifiable-units/SKILL.md) | verification | Apply to multi-step work (sweeps, migrations, runs of similar edits) and to how you stack commits and PRs. Break work into small units that each end in a verifiable state, check each before the next, and order delivery so the sequence proves itself to a reviewer. |
-| [test-behavior-not-implementation](./skills/principle-test-behavior-not-implementation/SKILL.md) | verification | Apply when you write, change, or keep a test. Call the code the way its users do and assert the result they observe against a literal expected value. If the test would still pass when every imported function returns undefined, rewrite the assertion or delete the test. |
+| [test-behavior-not-implementation](./skills/principle-test-behavior-not-implementation/SKILL.md) | verification | Assert what users can observe. Tests fail when behavior breaks and keep passing when only internals change. |
 | [explain-the-number](./skills/principle-explain-the-number/SKILL.md) | verification | Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think. |
 | [guard-the-context-window](./skills/principle-guard-the-context-window/SKILL.md) | delegation | Route bulk to subagents; keep summaries in the main thread, not raw payloads. |
 | [never-block-on-the-human](./skills/principle-never-block-on-the-human/SKILL.md) | delegation | Proceed, present the result, let the human course-correct after the fact; reserve confirmation for irreversible actions. |
 | [encode-lessons-in-structure](./skills/principle-encode-lessons-in-structure/SKILL.md) | meta | Encode the rule as a lint, metadata flag, runtime check, or script instead of more text. |
 
 </details>
-## Shipped here (native)
+## Bundled dependencies
 
-Everything the mode references is installed — nothing from the old "not shipped here" list is missing:
+The enabled native plugin discovers these dependency skills:
 
-- `/deslop` and the `deslop` skill, `control-cli` (CLIs and TUIs), and `control-ui` (browser, Electron, web) are real installed OMP skills in this package, discovered through the enabled native plugin.
-- `/create-skill` is the real installed OMP authoring capability in this package — not a host built-in.
-- Inside `poteto-mode`, the [babysit playbook](./skills/poteto-mode/playbooks/babysit.md) handles PR-status requests end to end.
+- `deslop` removes code slop.
+- `control-cli` verifies CLI and TUI behavior.
+- `control-ui` verifies browser and native UI behavior.
+- `create-skill` authors OMP skills.
 
 ## Why are there no planning skills?
 
-By design, not by omission: the author does not believe in planning as a default artifact — the best spec is code. [`/poteto-mode`](./skills/poteto-mode/SKILL.md) covers planning when a task genuinely needs it (multi-phase plans, stacked PRs), but it is not a default.
+Planning is not a default artifact in the author's workflow. [`/poteto-mode`](./skills/poteto-mode/SKILL.md) covers planning when a task needs a multi-phase plan or stacked PRs.
 
 ## Make it yours
 
@@ -304,7 +302,7 @@ By design, not by omission: the author does not believe in planning as a default
 
 Type [`/automate-me`](./skills/automate-me/SKILL.md). It mines your recent project-scoped history, drafts a `<your-name>-mode` skill from how you've actually worked, and routes through pstack underneath. You keep pstack as the base and end up with your own routing skill alongside `poteto-mode`.
 
-Models are configurable too. [`/setup-pstack`](./skills/setup-pstack/SKILL.md) reads your authenticated models and preserves deliberate choices in [`models.json`](./models.json). `@task`, `@slow`, and `@smol` are the initial native selectors. Other configured native aliases are valid choices. `@default`, `inherit-parent`, and `auto` use the live parent model and effort. Panels are arrays with one worker per entry.
+Models are configurable too. [`/setup-pstack`](./skills/setup-pstack/SKILL.md) reads your authenticated models and preserves deliberate choices in the external user `models.json`. `@task`, `@slow`, and `@smol` are the initial native selectors. Other configured native aliases are valid choices. `@default`, `inherit-parent`, and `auto` use the live parent model and effort. Panels are arrays with one worker per entry.
 
 `/pstack models` preflights the configured selectors with no fallback. Missing roles or credentials are reported. A resolved model identity alone does not prove the selected effort. Actual child `resolvedModel` and `resolvedThinkingLevel` provide that evidence.
 
@@ -320,11 +318,11 @@ Verify on the real surface: `control-ui` for browser/native UI (native `browser`
 
 ## Automations (dormant Benny pack)
 
-pstack ships a dormant [Benny automation pack](./automations/benny/). Benny triages Slack issue reports, then reproduces and fixes confirmed bugs with real UI evidence. Its three internal skills (`reproduce-and-fix-issues`, `setup-benny`, `triage-issue-reports`) intentionally stay dormant and non-slash, per their source setup contract — do not expose them as ordinary commands.
+pstack ships a dormant [Benny automation pack](./automations/benny/). Benny triages Slack issue reports, then reproduces and fixes confirmed bugs with real UI evidence. Its three internal skills (`reproduce-and-fix-issues`, `setup-benny`, `triage-issue-reports`) stay dormant and are not slash commands.
 
 To set it up, point your OMP agent at [`FOR_AGENTS.md`](./automations/benny/FOR_AGENTS.md) and name the target repository. Setup merges the pack into the target at `.omp/automations/benny/`, confirms the shared pstack skills resolve in project scope, and keeps user configuration (and secrets) outside the copied pack. See the pack's [README](./automations/benny/README.md) and `templates/configuration.example.yaml`.
 
-Benny, `make-bot-ui`, and any scheduler-backed routine are gated on real integrations: Slack access, a tracker, a control adapter plus feature map, the Grok webhook routine, optional Tailscale, and a real scheduler/automation host. Absence of any of them is a named prerequisite — finish independent authorized work and stop. Installation provisions no accounts, tokens, webhooks, or exposure, and never autostarts external automations.
+Benny and `make-bot-ui` require real integrations. These include Slack, a tracker, a control adapter and feature map, the Grok webhook routine, optional Tailscale, and an automation host. Report missing prerequisites and finish independent authorized work. Installation provisions no accounts, tokens, webhooks, or network exposure. It never starts external automations.
 
 ## Remove the native package
 
@@ -338,17 +336,6 @@ Run removal only when authorized, then restart OMP. Native removal manages the p
 
 Use a separate source checkout. Install development dependencies with `npm install --ignore-scripts`, then run `npm run check`. The checks validate public package boundaries and exercise synthetic routing and scheduler behavior without reading active user configuration. CI runs the same command. Authenticated native dispatch and real Git-install upgrade proof are separate checks.
 
-## Upstream history (Cursor era — not executable)
-
-Kept for provenance. None of this runs in the OMP plugin; do not follow it as instructions.
-
-- The source README installed with `/add-plugin pstack` from the Cursor marketplace and configured model roles through an always-applied Cursor rule. The OMP port uses native selectors instead of those historical concrete defaults.
-- `/deslop`, `control-cli`, and `control-ui` shipped in the separate `cursor-team-kit` plugin; `/create-skill` and `/babysit` were Cursor built-ins. A rule written before 0.15.3 pinned the old default models and had to be deleted before re-running setup.
-- `/poteto-mode` composed with Cursor's `/loop` command for multi-hour runs; workers were dispatched with Cursor fields (`subagent_type`, `readonly`, `environment`, `run_in_background`, `cloud_base_branch`) and could pretend at cloud execution.
-- `why` queried third-party MCP servers per evidence category; `recall`/`correct`/`automate-me` mined Cursor chat transcripts; history meant Cursor transcript directories.
-- The overnight example ("land the stack even if CI flakes, everything merged by morning") runs verification unattended under a full-autonomy grant; landing follows the Shipping playbook's verified-run mechanics and the host's permission contract.
-- Original voice, kept verbatim: *"I'm [poteto](https://x.com/poteto). I'm not a president or ceo, but I've worked with millions of lines of code at Meta, Netflix, and Cursor. I'm also on the react core team where I help build and maintain react compiler. There's a growing sense that ai writes too much slop code. I agree … fork it. improve it. make it yours. PRs are welcome!"* — that invitation refers to the upstream project, not this native package.
-
 ## License
 
-MIT. See [LICENSE](./LICENSE) for pstack and [LICENSE.cursor-team-kit](./LICENSE.cursor-team-kit) for the three bundled Cursor team-kit dependencies. The logo ([`assets/logo.png`](./assets/logo.png)) and [`.cursor-plugin/plugin.json`](./.cursor-plugin/plugin.json), including Lauren Tan's author credit, are retained as historical source provenance, not native activation.
+MIT. See [LICENSE](./LICENSE) for pstack and Lauren Tan's author credit. See [LICENSE.cursor-team-kit](./LICENSE.cursor-team-kit) for the three bundled team-kit dependencies. [upstream.json](./upstream.json) records source provenance.

@@ -7,13 +7,15 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const metadata = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
 const provenance = JSON.parse(await readFile(join(root, 'upstream.json'), 'utf8'));
 assert.equal(metadata.name, 'pstack');
-assert.equal(metadata.version, '0.15.25-omp.1');
+assert.equal(metadata.version, '0.15.36-omp.1');
 assert.equal(metadata.upstreamVersion, provenance.upstreamVersion);
+assert.equal(provenance.upstreamVersion, '0.15.36');
+assert.equal(provenance.commit, 'ae5650febf4320793844c12c4adaa937f417f8da');
 assert.equal(metadata.repository.url, 'https://github.com/keylbill/pstack-omp.git');
 assert.deepEqual(metadata.omp.extensions, ['./extensions/pstack.js']);
 assert.match(await readFile(join(root, 'LICENSE'), 'utf8'), /Lauren Tan/);
 assert.match(await readFile(join(root, 'LICENSE.cursor-team-kit'), 'utf8'), /Cursor/);
-for (const path of ['plugin.json', 'models.json', 'installation.json', 'scripts/rollback.py', 'scripts/test_rollback.py']) {
+for (const path of ['plugin.json', '.cursor-plugin', 'models.json', 'installation.json', 'scripts/rollback.py', 'scripts/test_rollback.py']) {
   await assert.rejects(lstat(join(root, path)), { code: 'ENOENT' }, `${path} must not ship`);
 }
 const excluded = new Set(['.git', 'node_modules']);
@@ -31,7 +33,7 @@ async function inspect(directory) {
 }
 await inspect(root);
 for (const name of ['poteto-agent.md', 'comment-sicko.md']) await lstat(join(root, 'agents', name));
-for (const name of ['control-cli', 'control-ui', 'deslop', 'create-skill', 'setup-pstack', 'poteto-mode']) {
+for (const name of ['control-cli', 'control-ui', 'deslop', 'create-skill', 'setup-pstack', 'poteto-mode', 'statechart', 'create-formal-verification-skill', 'maintain-formal-verification-skill', 'ketchup-video']) {
   await lstat(join(root, 'skills', name, 'SKILL.md'));
 }
 console.log('Public package boundaries passed. This is not a secret scan or native runtime proof.');
