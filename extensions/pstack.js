@@ -8,8 +8,6 @@ const modeType = "org.pstack.omp.mode";
 const commandType = "org.pstack.omp.command";
 const scheduleTickType = "org.pstack.omp.schedule-tick";
 const packageRoot = fileURLToPath(new URL("../", import.meta.url));
-const updateReferencePath = join(packageRoot, "skills", "poteto-mode", "references", "upstream-update.md");
-const updateReferenceDir = join(packageRoot, "skills", "poteto-mode", "references");
 const roleNames = [
   "feature, refactoring", "bug-fix", "perf-issue", "hillclimb",
   "judgment and prose", "hardest tasks", "how explorer", "how explainer",
@@ -762,7 +760,7 @@ export default async function pstack(pi) {
   });
 
   pi.registerCommand("pstack", {
-    description: "Pstack: status, on, off, models, schedule, update, update check, or help. Mode changes persist in this session.",
+    description: "Pstack: status, on, off, models, schedule, or help. Mode changes persist in this session.",
     handler: async (args, ctx) => {
       const action = args.trim() || "status";
       if (action === "on" || action === "off") {
@@ -903,31 +901,7 @@ export default async function pstack(pi) {
         announce("Use /pstack schedule start <id> <everyMs> <prompt>, /pstack schedule stop [id], or /pstack schedule status [id].", { requested: action });
         return;
       }
-      if (normalized === "update" || normalized === "update check" || normalized.startsWith("update ")) {
-        if (ctx.agent.kind !== "main") {
-          announce("Pstack update belongs to the coordinator. Follow this worker's scoped assignment.", { enabled });
-          return;
-        }
-        if (normalized !== "update" && normalized !== "update check") {
-          announce("Use /pstack update to run the bounded update workflow or /pstack update check to compare only. Extra arguments are not accepted.", { requested: action });
-          return;
-        }
-        const mode = normalized === "update" ? "apply" : "check";
-        let body;
-        try {
-          body = await readFile(updateReferencePath, "utf8");
-        } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
-          announce(`Pstack update reference unreadable at ${updateReferencePath}: ${message}`, { error: message, referencePath: updateReferencePath });
-          return;
-        }
-        pi.sendUserMessage(
-          `The user invoked /pstack ${normalized}.\n\n${body}\n\nUpdate request: ${JSON.stringify({ mode })}\n\n[Reference directory: ${updateReferenceDir}]\nResolve relative assets against that directory. Native OMP tool contracts and authorization remain binding.`,
-          { attribution: "agent" },
-        );
-        return;
-      }
-      announce("Use /pstack status, /pstack on, /pstack off, /pstack models, /pstack schedule start|stop|status, /pstack update, or /pstack update check. Fresh main sessions default on; workers stay off. /poteto-mode enables the mode and invokes the full router; /skill:<name> is the native alternative for any installed skill.", { requested: action });
+      announce("Use /pstack status, /pstack on, /pstack off, /pstack models, or /pstack schedule start|stop|status. Fresh main sessions default on; workers stay off. /poteto-mode enables the mode and invokes the full router; /skill:<name> is the native alternative for any installed skill.", { requested: action });
     },
   });
 

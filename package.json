@@ -1,7 +1,7 @@
 {
   "name": "pstack",
-  "version": "0.15.25-omp.1",
-  "upstreamVersion": "0.15.25",
+  "version": "0.15.36-omp.1",
+  "upstreamVersion": "0.15.36",
   "description": "Lauren Tan's pstack engineering workflows adapted for native OMP",
   "type": "module",
   "license": "MIT",
