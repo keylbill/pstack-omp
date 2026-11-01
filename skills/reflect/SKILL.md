@@ -45,6 +45,8 @@ Present the synthesizer's full Accepted / Rejected / Backlog output and wait for
 
 File each Backlog item to your team's devex or backlog tracker when the user's authorization and host permission contract allow it. Otherwise report the required permission. Only the Accepted skill edits wait for the approval gate above.
 
+Never edit a skill inside an installed plugin package under `~/.omp/plugins/`. Before approval, show its destination, project `.omp/skills/<skill>/` or user `~/.omp/agent/skills/<skill>/`. After approval, copy the skill folder there and edit the copy. Never open a PR or push.
+
 Follow each approved row's Routing exactly:
 
 - Trivial existing-skill edit (a one-line bullet, a tightened sentence, a stale fact corrected): the parent does it directly.

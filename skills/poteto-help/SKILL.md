@@ -26,6 +26,7 @@ Check the state that changes the answer, and mention it only when it does:
 
 - Read the file at the effective `configurationPath` reported by `/pstack status` and native model-role settings when setup or cost matters. Missing configuration is a named prerequisite, not a reason to invent defaults or silently substitute a model.
 - No `verify-*` skill or other app harness in the project means agents have no scripted way to drive the app. Mention `/create-verification-skill` when the question is about proving a change works.
+- No formal verification skill in the project means no property is checked past what tests reach. Mention `/create-formal-verification-skill` when the question is about a race, an invariant, or another case tests rarely hit. When one exists and the code it covers changed after the commit it records as last in sync, mention `/maintain-formal-verification-skill` if the question touches that code.
 
 When the native role table is missing and it matters, ask whether the user wants to pick a model for each role and a reasoning budget now. It matters when the user is new, the question is about setup or cost, or the answer depends on which models run. Ask at most once per chat. If the need is also unclear, ask both questions together. Offer two choices:
 
@@ -34,11 +35,11 @@ When the native role table is missing and it matters, ask whether the user wants
 
 ## Get set up
 
-1. Check `omp plugin list --json` for the enabled native `pstack` package and confirm runtime skill, agent, and canonical extension discovery in a fresh session. Follow the native [setup guide](../../docs/guide/01-setup.md) when missing. Use `omp plugin install github:keylbill/pstack-omp#main` for installation and native `enable`/`disable` for availability; do not add standalone extension or individual discovery links. Cursor `/add-plugin` does not install this OMP extension. Use `omp plugin upgrade pstack` for the recorded Git ref. Local links cannot use native upgrade. Update OMP itself independently.
-2. Run [`/setup-pstack`](../setup-pstack/SKILL.md). It confirms the reasoning budget and native role mapping in the user-owned `models.json`. Native model assignments stay in OMP `modelRoles`. A stored budget alone never changes effort.
+1. Check `omp plugin list --json` for the enabled native `pstack` package and confirm runtime skill, agent, and canonical extension discovery in a fresh session. Follow the native [setup guide](../../docs/guide/01-setup.md) when missing. Use `omp plugin install github:keylbill/pstack-omp#main` for installation and native `enable`/`disable` for availability; do not add standalone extension or individual discovery links. Cursor `/add-plugin` does not install this OMP extension. Upgrade with `omp plugin upgrade pstack`, then restart OMP. An existing manual or local-link setup follows [Migrate an existing installation](../../docs/migrate-existing-installation.md) first. Update OMP itself independently.
+2. Run [`/setup-pstack`](../setup-pstack/SKILL.md). It confirms the reasoning budget and native role mapping in the user-owned `models.json`. Native model assignments stay in OMP `modelRoles`. A stored budget alone never changes effort. Then it offers once each to generate a verification skill and a formal verification skill for the project, unless the project already has one.
 3. Start a real task with `/poteto-mode`, a goal, and a check that can pass or fail.
 
-The native extension defaults fresh main sessions to mode on. Workers remain off unless explicitly invoked or given the delegate profile. `/pstack off` persists for that session. `/pstack update check` checks upstream and `/pstack update` invokes the native staged-update workflow, with its approval and promotion gates. The [README](../../README.md) and [guide page 1](../../docs/guide/01-setup.md) have the details. Offer to word their first prompt with them, per [`references/prompting.md`](references/prompting.md).
+The native extension defaults fresh main sessions to mode on. Workers remain off unless explicitly invoked or given the delegate profile. `/pstack off` persists for that session. The [README](../../README.md) and [guide page 1](../../docs/guide/01-setup.md) have the details. Offer to word their first prompt with them, per [`references/prompting.md`](references/prompting.md).
 
 If cost is the worry, say where the tokens go and how to spend fewer. pstack spends extra tokens on subagents and review panels. Rerun `/setup-pstack` and pick a smaller budget or cheaper models. A role set to `auto` or `inherit-parent` resolves to native `@default` through the planned helper hook. It follows the parent model rather than choosing a cheaper model automatically. A shorter panel list runs fewer subagents, one for each entry. Use `/pstack off` for turns that do not need the workflow. Role, family, effort, panel, and tier changes remain explicit user choices.
 
@@ -60,12 +61,13 @@ The default answer is `/poteto-mode`, which runs most of the others when its ste
 |---|---|
 | Do any non-trivial task with rigor | [`/poteto-mode`](../poteto-mode/SKILL.md) |
 | Check that the agent understood their goal and the problem before it starts | [`/in-your-own-words`](../in-your-own-words/SKILL.md) |
-| Aim a task higher before starting: more expert, more outcome-focused, not overspecified | [`/sharpen`](../sharpen/SKILL.md) |
+| Get a prompt rewritten deeper, not bigger, before sending it: what a top professional would add, their raw material and methods, and an outside check. It returns the prompt and doesn't do the task | [`/sharpen`](../sharpen/SKILL.md) |
 | Know how code works now, or where new code should live | [`/how`](../how/SKILL.md) |
 | Know why code is shaped this way, or where a number came from | [`/why`](../why/SKILL.md) |
 | Understand a change or subsystem, explained plainly | [`/teach`](../teach/SKILL.md) |
 | Catch up on their own recent work on a topic | [`/recall`](../recall/SKILL.md) |
-| Catch up on what changed in this chat since their last message, in a few plain sentences and small visuals, with enough context to decide each action item | [`/ketchup`](../ketchup/SKILL.md) |
+| Catch up on what changed in this chat since their last message, in plain words and small visuals, with every item waiting on them listed and decidable from the reply alone | [`/ketchup`](../ketchup/SKILL.md) |
+| Catch up like `/ketchup`, in a short subtitled video of slides, with the waiting calls as text under it | [`/ketchup-video`](../ketchup-video/SKILL.md) |
 | Know what a small diff could break outside itself | [`/blast-radius`](../blast-radius/SKILL.md) |
 | Settle types and module shape before code that crosses a function boundary | [`/architect`](../architect/SKILL.md) |
 | Get several attempts at one brief, merged into the best one | [`/arena`](../arena/SKILL.md) |
@@ -79,6 +81,9 @@ The default answer is `/poteto-mode`, which runs most of the others when its ste
 | Hear the last reply again in plain words | [`/bro`](../bro/SKILL.md) |
 | Give agents a scripted way to drive the app and prove behavior | [`/create-verification-skill`](../create-verification-skill/SKILL.md) |
 | Bring a verification skill and its feature map back in line with the app | [`/maintain-verification-skill`](../maintain-verification-skill/SKILL.md) |
+| Formally verify a race, invariant, or other property that tests rarely reach | [`/create-formal-verification-skill`](../create-formal-verification-skill/SKILL.md) |
+| Bring a formal verification back in line after the code it covers changed, and learn whether a failure is drift or a bug | [`/maintain-formal-verification-skill`](../maintain-formal-verification-skill/SKILL.md) |
+| Show a PM or designer what the user sees as a chart checked by a TLA+ model, with the shortest path to each state that breaks a rule | [`/statechart`](../statechart/SKILL.md) |
 | Vet a performance number before reporting or acting on it | [`/benchmark-checklist`](../benchmark-checklist/SKILL.md) |
 | Run a large or cross-cutting change, or one to review after stepping away | [`/figure-it-out`](../figure-it-out/SKILL.md) |
 | Keep a decision log during a run, and review it afterward | [`/show-me-your-work`](../show-me-your-work/SKILL.md) |
@@ -114,7 +119,7 @@ Playbooks are step lists inside `/poteto-mode`, not skills, so they have no slas
 - "land the stack" runs Shipping.
 - "take over this branch" runs Session pickup.
 - "pause safely" runs Pause safely.
-- "full autopilot on this queue" runs Autopilot-full. "stack them, don't ship" runs Autopilot-stack.
+- "full autopilot on this queue" runs Autopilot-full. "autopilot, don't merge" runs Autopilot-stack.
 - "run the eval playbook" runs Eval.
 
 When native mode is off, explicitly invoke `/poteto-mode` to select these playbooks instead of relying on a similarly named host workflow. The Playbooks section of [`poteto-mode`](../poteto-mode/SKILL.md) lists every playbook and when it applies. [Guide page 6](../../docs/guide/06-verify-and-ship.md) covers opening, babysitting, and landing a PR.
