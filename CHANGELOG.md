@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+Maintainer tooling only. The package release and the upstream pin are unchanged.
+
+- Add `npm run upstream:check` and `npm run upstream:apply`. They fetch the pinned and candidate `cursor/plugins` commits, classify every mapped and review path against the adapted source, and apply clean upstream changes with a three-way merge.
+- Add the project command `/upstream` in `.omp/commands/upstream.md`. It runs the scripts on a `port/upstream-<version>` branch, then has the agent review every changed path for OMP nativeness, prove the result, and open a pull request with a per-path outcome table.
+- Replace the manual fetch, compare, and apply steps in `docs/maintainer-upstream.md` with the scripts and `/upstream`. Keep every native contract and proof requirement.
+- Remove the literal version and commit pins from `scripts/check-package.mjs`, keep the consistency checks, scan shipped text for Cursor terms in `cursorTerms`, and reject a root `commands/` directory.
+- Run the offline classifier tests in `npm run check`.
+
 ## 0.15.36-omp.1
 
 Port upstream pstack 0.15.36 at commit `ae5650febf4320793844c12c4adaa937f417f8da`.
