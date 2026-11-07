@@ -334,7 +334,9 @@ Run removal only when authorized, then restart OMP. Native removal manages the p
 
 ## Develop the adaptation
 
-Use a separate source checkout. Install development dependencies with `npm install --ignore-scripts`, then run `npm run check`. The checks validate public package boundaries and exercise synthetic routing and scheduler behavior without reading active user configuration. CI runs the same command. Authenticated native dispatch and real Git-install upgrade proof are separate checks.
+Use a separate source checkout. Install development dependencies with `npm install --ignore-scripts`, then run `npm run check`. The checks validate public package boundaries and exercise the upstream classifier and synthetic routing and scheduler behavior without reading active user configuration. CI runs the same command. Authenticated native dispatch and real Git-install upgrade proof are separate checks.
+
+To port a new upstream pstack commit, open OMP at the checkout root and run `/upstream`, optionally with a candidate commit. The project command runs the merge scripts, then has the agent review every changed path for OMP nativeness and open a pull request. [Reconcile upstream changes in a source checkout](./docs/maintainer-upstream.md) describes the scripts, classes, native contracts, and proof requirements.
 
 ## License
 
