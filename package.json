@@ -22,7 +22,9 @@
     ]
   },
   "scripts": {
-    "check": "node scripts/check-package.mjs && node scripts/test_pstack_routing_regression.mjs && node --test scripts/test_pstack_schedule_regression.mjs"
+    "check": "node scripts/check-package.mjs && node scripts/test_pstack_routing_regression.mjs && node --test scripts/test_pstack_schedule_regression.mjs && node scripts/test_upstream.mjs",
+    "upstream:check": "node scripts/upstream.mjs check",
+    "upstream:apply": "node scripts/upstream.mjs apply"
   },
   "devDependencies": {
     "zod": "^4.0.0"
